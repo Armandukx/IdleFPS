@@ -1,0 +1,12 @@
+[
+	{
+		"modid": "idlefps",
+		"name": "IdleFPS",
+		"description": "Limit FPS when Minecraft is in the background.",
+		"version": "1.0.0",
+		"mcversion": "1.8.9",
+		"url": "https://github.com/Armandukx/IdleFPS",
+		"authorList": "Armandukx",
+		"logoFile": "icon.png"
+	}
+]
