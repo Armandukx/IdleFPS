@@ -22,7 +22,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod(
         name = IdleFPS.NAME,
@@ -32,20 +35,22 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class IdleFPS {
     public static final String NAME = "IdleFPS";
     public static final String MODID = "idlefps";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
     private boolean fpsRetrieved = false;
     public static int fps;
+
     @Mod.EventHandler
-    public void init() {
+    public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !fpsRetrieved) {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.currentScreen == null) {
-                fps = Minecraft.getDebugFPS();
+                fps = mc.gameSettings.limitFramerate;
                 fpsRetrieved = true;
             }
         }

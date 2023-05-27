@@ -7,14 +7,12 @@ plugins {
 }
 
 group = "io.armandukx.archloomtemplate"
-version = "1.0.0"
+version = "1.0.1"
 
-// Toolchains:
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 }
 
-// Minecraft configuration:
 loom {
     log4jConfigs.from(file("log4j2.xml"))
     launchConfigs {
@@ -38,8 +36,6 @@ sourceSets.main {
     output.setResourcesDir(file("$buildDir/classes/java/main"))
 }
 
-// Dependencies:
-
 repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
@@ -50,6 +46,7 @@ val shadowImpl: Configuration by configurations.creating {
 }
 
 dependencies {
+    implementation("org.projectlombok:lombok:1.18.22")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
@@ -61,7 +58,6 @@ dependencies {
 
 }
 
-// Tasks:
 tasks.processResources {
     inputs.property("version", version)
     filesMatching("mcmod.info") {

@@ -69,7 +69,7 @@ public class IdleFPSInstallerFrame extends JFrame implements ActionListener, Mou
     public IdleFPSInstallerFrame() {
         try {
             setName("IdleFPSInstallerFrame");
-            setTitle("ASB Installer");
+            setTitle("IFPS Installer");
             setResizable(false);
             setSize(TOTAL_WIDTH, TOTAL_HEIGHT);
             setContentPane(getPanelContentPane());
@@ -145,7 +145,7 @@ public class IdleFPSInstallerFrame extends JFrame implements ActionListener, Mou
                 margin = 5;
 
                 BufferedImage myPicture = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
-                        .getResourceAsStream("assets/idlefps/icon.png"), "Logo not found."));
+                        .getResourceAsStream("assets/idlefps/textures/logo.png"), "Logo not found."));
                 Image scaled = myPicture.getScaledInstance(w-margin*2, h-margin, Image.SCALE_SMOOTH);
                 logo = new JLabel(new ImageIcon(scaled));
                 logo.setName("logo");

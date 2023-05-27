@@ -3,10 +3,7 @@
   "refmap": "mixins.armandukx.refmap.json",
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",
-  "required": true,
   "mixins": [
     "IdleFpsMixin"
-  ],
-  "client": [
   ]
 }
