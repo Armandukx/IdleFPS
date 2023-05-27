@@ -33,4 +33,4 @@ For seamless installation and optimal utilization of the mod, don't hesitate to 
 
 ## License
 
-This project operates under the GNU General Public License v3.0, ensuring open-source accessibility. For further information, please refer to the [LICENSE](https://github.com/Armandukx/ArmandukxSB/blob/main/LICENSE) file.
+This project operates under the GNU General Public License v3.0, ensuring open-source accessibility. For further information, please refer to the [LICENSE](LICENSE) file.
