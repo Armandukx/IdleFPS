@@ -24,7 +24,7 @@
 
 ### The installation guide is [here](https://github.com/Armandukx/IdleFPS/wiki)
 <h1 align="center">Feature List</h1>
-Limits ur fps in when minecraft is in the background
+<li>Limits ur fps in when minecraft is in the background</li>
 More coming soon!
 
 ## Support
