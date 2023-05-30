@@ -18,13 +18,15 @@
     </a>
 </div>
 
-<h4 align="center">A Minecraft Forge mod that limits FPS when Minecraft is in the background for Minecraft players.</h4>
+<h4 align="center">Idle FPS adapts Minecraft's rendering speed to the user's settings, with a default value of 1 FPS when unfocused or hidden.</h4>
 
 <h1 align="center">Getting Started</h1>
 
 ### The installation guide is [here](https://github.com/Armandukx/IdleFPS/wiki)
 <h1 align="center">Feature List</h1>
-<li>Limits ur fps in when minecraft is in the background</li>
+<li>Limits Minecraft's FPS when in the background (unfoccused or hidden).</li>
+<li>Restricts Minecraft's render distance when in the background (unfocused or hidden).</li>
+<li>Checks for updates</li>
 More coming soon!
 
 ## Support
