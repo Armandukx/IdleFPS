@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS when Minecraft is in the background
+ * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,48 +20,57 @@ package io.armandukx.mixin;
 
 import io.armandukx.IdleFPS;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.settings.GameSettings;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public abstract class IdleFpsMixin {
-    @Shadow public abstract void setIngameFocus();
-    @Shadow public abstract void setIngameNotInFocus();
 
     @Inject(method = "updateDisplay", at = @At("HEAD"))
     private void onUpdateDisplay(CallbackInfo callbackInfo) {
+        if (Display.isCloseRequested() || Minecraft.getMinecraft().theWorld == null) return;
+        GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
         if (!Display.isActive()) {
-            setIngameNotInFocus();
-            GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
-            gameSettings.limitFramerate = 1;
-        }
-    }
-
-    @Inject(method = "displayGuiScreen", at = @At("RETURN"))
-    private void onDisplayGuiScreen(GuiScreen guiScreen, CallbackInfo callbackInfo) {
-        if (guiScreen == null && Display.isActive()) {
-            setIngameFocus();
-            GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
-            gameSettings.limitFramerate = IdleFPS.fps;
+            if (IdleFPS.config.bFpsToggle) {
+                gameSettings.limitFramerate = Integer.parseInt(IdleFPS.config.backgroundFps);
+            }
+            if (IdleFPS.config.bDistToggle) {
+                gameSettings.renderDistanceChunks = Integer.parseInt(IdleFPS.config.backgroundRenderDist);
+            }
+        } else if (Display.isActive()) {
+            if (Minecraft.getMinecraft().currentScreen instanceof GuiOptions){
+                System.out.println("In Settings"); // For Debugging (I know its shit)
+            }else {
+                if (IdleFPS.config.bFpsToggle) {
+                    gameSettings.limitFramerate = IdleFPS.fps;
+                }
+                if (IdleFPS.config.bDistToggle) {
+                    gameSettings.renderDistanceChunks = IdleFPS.renderDistance;
+                }
+            }
         }
     }
 
     @Inject(method = "runTick", at = @At("RETURN"))
-    private void onRunTick(CallbackInfo callbackInfo){
+    private void onRunTick(CallbackInfo callbackInfo) {
         if (!Display.isActive()) return;
         GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
         int currentFps = gameSettings.limitFramerate;
-        if (currentFps != IdleFPS.fps) {
-            if(currentFps >= 10){
-                IdleFPS.fps = currentFps;
-                gameSettings.saveOptions();
-            }
+        int currentDist = gameSettings.renderDistanceChunks;
+
+        if (currentFps != IdleFPS.fps && currentFps >= Integer.parseInt(IdleFPS.config.backgroundFps) + 1) {
+            IdleFPS.fps = currentFps;
+            gameSettings.saveOptions();
+        }
+
+        if (currentDist != IdleFPS.renderDistance && currentDist >= Integer.parseInt(IdleFPS.config.backgroundRenderDist) + 1) {
+            IdleFPS.renderDistance = currentDist;
+            gameSettings.saveOptions();
         }
     }
 }

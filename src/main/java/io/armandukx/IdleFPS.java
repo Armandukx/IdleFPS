@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS when Minecraft is in the background
+ * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,11 +18,19 @@
 
 package io.armandukx;
 
+import io.armandukx.command.IFPSCommand;
+import io.armandukx.config.Config;
+import io.armandukx.config.ConfigHandler;
+import io.armandukx.listener.EventListener;
+import io.armandukx.utils.UpdateChecker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,24 +43,46 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class IdleFPS {
     public static final String NAME = "IdleFPS";
     public static final String MODID = "idlefps";
-    public static final String VERSION = "1.0.1";
-    private boolean fpsRetrieved = false;
+    public static final String VERSION = "1.0.2";
+    public static IdleFPS instance;
+    public static final String prefix =
+            EnumChatFormatting.WHITE + "[" + EnumChatFormatting.WHITE + "I" + EnumChatFormatting.YELLOW + "F" + EnumChatFormatting.GREEN + "P" + EnumChatFormatting.RED + "S"
+                    + "] " + EnumChatFormatting.RESET;
+    private boolean retrieved = false;
     public static int fps;
+    public static int renderDistance;
+    private final EventListener eventListener;
 
+    public IdleFPS() {
+        this.eventListener = new EventListener();
+    }
+    @Mod.EventHandler
+    public void preinit(FMLPreInitializationEvent event) {
+        IdleFPS.instance = this;
+        ClientCommandHandler.instance.registerCommand(new IFPSCommand());
+    }
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(eventListener);
+        MinecraftForge.EVENT_BUS.register(new UpdateChecker());
+        ConfigHandler.reloadConfig();
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-        if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !fpsRetrieved) {
+        if (event.type == RenderGameOverlayEvent.ElementType.TEXT && !retrieved) {
             Minecraft mc = Minecraft.getMinecraft();
             if (mc.currentScreen == null) {
                 fps = mc.gameSettings.limitFramerate;
-                fpsRetrieved = true;
+                renderDistance = mc.gameSettings.renderDistanceChunks;
+                retrieved = true;
             }
         }
+    }
+    public static Config config = new Config();
+    public EventListener getEventListener() {
+        return eventListener;
     }
 }

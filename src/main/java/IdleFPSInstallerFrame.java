@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS when Minecraft is in the background
+ * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
