@@ -1,0 +1,16 @@
+{
+  "mappings": {
+    "io/armandukx/mixin/IdleTweaksMixin": {
+      "updateDisplay": "Lnet/minecraft/client/Minecraft;func_175601_h()V",
+      "runTick": "Lnet/minecraft/client/Minecraft;func_71407_l()V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "io/armandukx/mixin/IdleTweaksMixin": {
+        "updateDisplay": "Lnet/minecraft/client/Minecraft;func_175601_h()V",
+        "runTick": "Lnet/minecraft/client/Minecraft;func_71407_l()V"
+      }
+    }
+  }
+}
