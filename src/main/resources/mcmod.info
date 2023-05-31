@@ -1,12 +1,14 @@
 [
-	{
-		"modid": "idlefps",
-		"name": "IdleFPS",
-		"description": "Limits FPS when Minecraft is in the background.",
-		"version": "${version}",
-		"mcversion": "1.8.9",
-		"url": "https://github.com/Armandukx/IdleFPS",
-		"authorList": "Armandukx",
-		"logoFile": "logo.png"
-	}
+  {
+    "modid": "${modid}",
+    "name": "IdleTweaks",
+    "description": "Reduces Minecraft's resource usage while it runs in the background.",
+    "version": "${version}",
+    "mcversion": "1.12.2",
+    "url": "https://github.com/Armandukx/IdleFPS",
+    "authorList": [
+      "Armandukx"
+    ],
+    "logoFile": "logo.png"
+  }
 ]

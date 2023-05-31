@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -34,20 +34,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ToggleButton extends GuiButton {
 
 	public ToggleButton(int buttonId, int x, int y, String buttonText) {
-		super(buttonId, x, y, Minecraft.getMinecraft().fontRendererObj.getStringWidth(buttonText), 17, buttonText);
+		super(buttonId, x, y, Minecraft.getMinecraft().fontRenderer.getStringWidth(buttonText), 17, buttonText);
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
-			FontRenderer fontrenderer = mc.fontRendererObj;
-			mc.getTextureManager().bindTexture(buttonTextures);
+			FontRenderer fontrenderer = mc.fontRenderer;
+			mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			this.hovered =
-				mouseX >= this.xPosition &&
-				mouseY >= this.yPosition &&
-				mouseX < this.xPosition + this.width &&
-				mouseY < this.yPosition + this.height;
+				mouseX >= this.x &&
+				mouseY >= this.y &&
+				mouseX < this.x + this.width &&
+				mouseY < this.y + this.height;
 			GlStateManager.enableBlend();
 			GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 			GlStateManager.blendFunc(770, 771);
@@ -66,8 +66,8 @@ public class ToggleButton extends GuiButton {
 			this.drawCenteredString(
 					fontrenderer,
 					this.displayString,
-					this.xPosition + this.width / 2,
-					this.yPosition + (this.height - 8) / 2,
+					this.x + this.width / 2,
+					this.y + (this.height - 8) / 2,
 					j
 				);
 		}

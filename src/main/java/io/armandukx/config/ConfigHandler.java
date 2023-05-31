@@ -1,23 +1,5 @@
 /*
- * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
- * Copyright (c) 2023 Armandukx
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-/*
- * ArmandukxSB - A customizable quality of life mod for Hypixel Skyblock
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -36,7 +18,7 @@
 
 package io.armandukx.config;
 
-import io.armandukx.IdleFPS;
+import io.armandukx.IdleTweaks;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
@@ -44,7 +26,7 @@ import java.io.File;
 public class ConfigHandler {
     public static Configuration config;
 
-    private final static String file = "config/idlefps.cfg";
+    private final static String file = "config/idletweaks.cfg";
 
     public static void init() {
         config = new Configuration(new File(file));
@@ -139,9 +121,9 @@ public class ConfigHandler {
         init();
 
         // General
-        IdleFPS.config.bFpsToggle = initBoolean("general", "bFpsToggle", true);
-        IdleFPS.config.bDistToggle = initBoolean("general", "bDistToggle", false);
-        IdleFPS.config.backgroundFps = initString("general", "backgroundFps", "1");
-        IdleFPS.config.backgroundRenderDist = initString("general", "backgroundRenderDist", "2");
+        IdleTweaks.config.bFpsToggle = initBoolean("general", "bFpsToggle", true);
+        IdleTweaks.config.bDistToggle = initBoolean("general", "bDistToggle", false);
+        IdleTweaks.config.backgroundFps = initString("general", "backgroundFps", "1");
+        IdleTweaks.config.backgroundRenderDist = initString("general", "backgroundRenderDist", "2");
     }
 }

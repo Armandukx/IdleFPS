@@ -1,5 +1,5 @@
 /*
- * ArmandukxSB - A customizable quality of life mod for Hypixel Skyblock
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,13 +36,13 @@ import java.util.Scanner;
 
 public class APIHandler {
     public static JsonObject getResponse(String urlString, boolean hasError) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         try {
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("User-Agent", "ASB/1.0");
+            conn.setRequestProperty("User-Agent", "idt/1.0");
 
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
@@ -68,11 +68,11 @@ public class APIHandler {
                         return gson.fromJson(error, JsonObject.class);
                     }
                 } else {
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "Request failed. HTTP Error Code: " + conn.getResponseCode()));
+                    player.sendMessage(new TextComponentString(TextFormatting.DARK_RED + "Request failed. HTTP Error Code: " + conn.getResponseCode()));
                 }
             }
         } catch (IOException ex) {
-            player.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "An error has occured. See logs for more details."));
+            player.sendMessage(new TextComponentString(TextFormatting.DARK_RED + "An error has occurred. See logs for more details."));
             ex.printStackTrace();
         }
         return new JsonObject();

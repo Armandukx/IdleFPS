@@ -4,6 +4,6 @@
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "IdleFpsMixin"
+    "IdleTweaksMixin"
   ]
 }

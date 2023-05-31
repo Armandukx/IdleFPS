@@ -1,5 +1,5 @@
 /*
- * ArmandukxSB - A customizable quality of life mod for Hypixel Skyblock
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,15 +19,14 @@
 package io.armandukx.utils;
 
 import com.google.gson.JsonObject;
-import io.armandukx.IdleFPS;
+import io.armandukx.IdleTweaks;
 import io.armandukx.handler.APIHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
 
 public class UpdateChecker {
@@ -35,33 +34,39 @@ public class UpdateChecker {
     static boolean updateChecked = false;
 
     @SubscribeEvent
-    public void onJoin(PlayerEvent.PlayerLoggedInEvent event) {
+    public void onJoin(EntityJoinWorldEvent event) {
         if (!updateChecked) {
-            updateChecked = true;
+            if (event.getEntity() instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) event.getEntity();
+                updateChecked = true;
 
-            new Thread(() -> {
-                EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+                new Thread(() -> {
 
-                System.out.println("Checking for updates...");
-                JsonObject latestRelease = APIHandler.getResponse("https://api.github.com/repos/Armandukx/IdleFPS/releases/latest", false);
+                    System.out.println("Checking for updates...");
+                    JsonObject latestRelease = APIHandler.getResponse("https://api.github.com/repos/Armandukx/IdleFPS/releases/latest", false);
 
-                String latestTag = latestRelease.get("tag_name").getAsString();
-                DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(IdleFPS.VERSION);
-                DefaultArtifactVersion latestVersion = new DefaultArtifactVersion(latestTag.substring(1));
+                    String latestTag = latestRelease.get("tag_name").getAsString();
+                    String McVersion = latestRelease.get("name").getAsString();
+                    DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(IdleTweaks.VERSION);
+                    DefaultArtifactVersion latestVersion = new DefaultArtifactVersion(latestTag.substring(1));
 
-                if (currentVersion.compareTo(latestVersion) < 0) {
-                    String releaseURL = latestRelease.get("html_url").getAsString();
+                    if (McVersion.contains("1.12.2")) {
+                        if (currentVersion.compareTo(latestVersion) < 0) {
+                            String releaseURL = latestRelease.get("html_url").getAsString();
 
-                    ChatComponentText update = new ChatComponentText(EnumChatFormatting.GREEN + "" + EnumChatFormatting.BOLD + "  [UPDATE]  ");
-                    update.setChatStyle(update.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));
+                            TextComponentString update = new TextComponentString(TextFormatting.GREEN + "" + TextFormatting.BOLD + "  [UPDATE]  ");
+                            update.setStyle(update.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));
 
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                            player.sendMessage(new TextComponentString(TextFormatting.BOLD + IdleTweaks.prefix + TextFormatting.DARK_RED + IdleTweaks.NAME + " is outdated. Please update to " + latestTag + ".\n").appendSibling(update));
+                        }
                     }
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + IdleFPS.prefix + EnumChatFormatting.DARK_RED + IdleFPS.NAME + " is outdated. Please update to " + latestTag + ".\n").appendSibling(update));                }
-            }).start();
+                }).start();
+            }
         }
     }
 }

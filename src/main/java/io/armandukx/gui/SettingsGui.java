@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,18 @@
 
 package io.armandukx.gui;
 
-import io.armandukx.IdleFPS;
+import io.armandukx.IdleTweaks;
 import io.armandukx.config.ConfigHandler;
 import io.armandukx.gui.component.ToggleButton;
 import io.armandukx.utils.GuiUtils;
 import io.armandukx.utils.structs.GuiPage;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -57,19 +58,19 @@ public class SettingsGui extends GuiScreen {
 				0,
 				new GuiPage()
 						.addButtons(
-								() -> addButton(0,0, IdleFPS.config.bFpsToggle),
-								() -> addButton(1,2, IdleFPS.config.bDistToggle)
+								() -> addButton(0,0, IdleTweaks.config.bFpsToggle),
+								() -> addButton(1,2, IdleTweaks.config.bDistToggle)
 						)
 						.addTextFields(
-								() -> addTextField(0, 1, IdleFPS.config.backgroundFps)
-								//() -> addTextField(1, 3, IdleFPS.config.backgroundRenderDist)
+								() -> addTextField(0, 1, IdleTweaks.config.backgroundFps),
+								() -> addTextField(1, 3, IdleTweaks.config.backgroundRenderDist)
 						)
 						.addSettings(
 								() -> addSetting("Background FPS Toggle","To enable or disable the 'Background FPS' feature", 0),
 								() -> addSetting("Background FPS","The limit for FPS when minecraft is in background", 1),
 
-								() -> addSetting("Background Render Distance Toggle","Changes the render distance to 2 when MC in background", 2)
-								//() -> addSetting("Background Render Distance","The limit for Render Distance when minecraft is in background", 3) Later Update (I cant figure out the bug)
+								() -> addSetting("Background Render Distance Toggle","Changes the render distance to 2 when MC in background", 2),
+								() -> addSetting("Background Render Distance","The limit for Render Distance when minecraft is in background", 3)
 						)
 		);
 	}
@@ -101,7 +102,7 @@ public class SettingsGui extends GuiScreen {
 		drawRect(guiX, guiY, guiX + guiWidth, guiY + guiHeight, 0xF2181c25);
 		GuiUtils.applyGl(() -> {
 			GlStateManager.scale(2, 2, 1);
-			fontRendererObj.drawStringWithShadow("ArmandukxSB", guiX / 2F + 5, guiY / 2F + 5, 0xFF28709e);
+			fontRenderer.drawStringWithShadow(IdleTweaks.NAME, guiX / 2F + 5, guiY / 2F + 5, 0xFF28709e);
 			GuiUtils.drawHorizontalLine(guiX / 2 + 5, (guiX + guiWidth) / 2 - 5, guiY / 2 + 16, 0xFF28709e);
 			GuiUtils.drawVerticalLine(guiX / 2 + 45, guiY / 2 + 16, (guiY + guiHeight) / 2 - 5, 0xFF28709e);
 		});
@@ -113,7 +114,7 @@ public class SettingsGui extends GuiScreen {
 
 		textFields.forEach(GuiTextField::drawTextBox);
 
-		buttonList.forEach(guiButton -> guiButton.drawButton(mc, mouseX, mouseY));
+		buttonList.forEach(guiButton -> guiButton.drawButton(Minecraft.getMinecraft(), mouseX, mouseY, 0));
 
 		GuiUtils.disableGlScissors();
 
@@ -129,14 +130,14 @@ public class SettingsGui extends GuiScreen {
 		if (pageNum == 0) {
 			switch (button.id) {
 				case 0:
-					IdleFPS.config.bFpsToggle = !IdleFPS.config.bFpsToggle;
-					ConfigHandler.writeBooleanConfig("general", "bFpsToggle", IdleFPS.config.bFpsToggle);
-					button.displayString = IdleFPS.config.bFpsToggle ? "On" : "Off";
+					IdleTweaks.config.bFpsToggle = !IdleTweaks.config.bFpsToggle;
+					ConfigHandler.writeBooleanConfig("general", "bFpsToggle", IdleTweaks.config.bFpsToggle);
+					button.displayString = IdleTweaks.config.bFpsToggle ? "On" : "Off";
 					break;
 				case 1:
-					IdleFPS.config.bDistToggle = !IdleFPS.config.bDistToggle;
-					ConfigHandler.writeBooleanConfig("general", "bDistToggle", IdleFPS.config.bDistToggle);
-					button.displayString = IdleFPS.config.bDistToggle ? "On" : "Off";
+					IdleTweaks.config.bDistToggle = !IdleTweaks.config.bDistToggle;
+					ConfigHandler.writeBooleanConfig("general", "bDistToggle", IdleTweaks.config.bDistToggle);
+					button.displayString = IdleTweaks.config.bDistToggle ? "On" : "Off";
 					break;
 			}
 		}
@@ -154,24 +155,25 @@ public class SettingsGui extends GuiScreen {
 	public void onGuiClosed() {
 		for (GuiTextField textField : textFields) {
 			if (pageNum == 0) {
-				if (textField.getId() == 0) {
-					String backgroundFps = textField.getText();
-					int fps = Integer.parseInt(backgroundFps);
-					if (fps >= 1 && fps <= 100) {
-						IdleFPS.config.backgroundFps = backgroundFps;
-						ConfigHandler.writeStringConfig("general", "backgroundFps", IdleFPS.config.backgroundFps);
-					}
-						/*case 1:
+				switch (textField.getId()) {
+					case 0:
+						String backgroundFps = textField.getText();
+						int fps = Integer.parseInt(backgroundFps);
+						if (fps >= 1 && fps <= 100) {
+							IdleTweaks.config.backgroundFps = backgroundFps;
+							ConfigHandler.writeStringConfig("general", "backgroundFps", IdleTweaks.config.backgroundFps);
+							break;
+						}
+					case 1:
 						String backgroundDist = textField.getText();
 						int distance = Integer.parseInt(backgroundDist);
-						if (distance >= 2 && distance <= 32) {
-							IdleFPS.config.backgroundRenderDist = backgroundDist;
-							ConfigHandler.writeStringConfig("general", "backgroundDist", IdleFPS.config.backgroundRenderDist);
+						if (distance >= 0 && distance <= 32) {
+							IdleTweaks.config.backgroundRenderDist = backgroundDist;
+							ConfigHandler.writeStringConfig("general", "backgroundRenderDist", IdleTweaks.config.backgroundRenderDist);
 							break;
-						}break;*/
+						}
 				}
-				break;
-			}break;
+			}
 		}
 	}
 
@@ -219,7 +221,7 @@ public class SettingsGui extends GuiScreen {
 	@Override
 	public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 		if (isDragging) {
-			scrollbarY = MathHelper.clamp_int(mouseY - guiY - scrollbarClickOffset, 36, guiHeight - scrollbarHeight - 11);
+			scrollbarY = MathHelper.clamp(mouseY - guiY - scrollbarClickOffset, 36, guiHeight - scrollbarHeight - 11);
 			initializeComponents(true);
 		}
 	}
@@ -231,7 +233,7 @@ public class SettingsGui extends GuiScreen {
 		int dWheel = Mouse.getEventDWheel();
 		if (needsScrollbar() && dWheel != 0) {
 			dWheel = -Integer.signum(dWheel) * 10;
-			newScrollIfInside = MathHelper.clamp_int(scrollbarY + dWheel, 36, guiHeight - scrollbarHeight - 11);
+			newScrollIfInside = MathHelper.clamp(scrollbarY + dWheel, 36, guiHeight - scrollbarHeight - 11);
 		}
 	}
 	private void addButton(int id, int count, boolean curVal) {
@@ -242,7 +244,7 @@ public class SettingsGui extends GuiScreen {
 	private void addTextField(int id, int count, String curVal) {
 		int translateValue = count * 45 + calculateScrollTranslate();
 
-		GuiTextField textBox = new GuiTextField(id, this.fontRendererObj, guiX + guiWidth - 101, guiY + 38 + translateValue, 90, 16);
+		GuiTextField textBox = new GuiTextField(id, this.fontRenderer, guiX + guiWidth - 101, guiY + 38 + translateValue, 90, 16);
 		textBox.setText(curVal);
 		this.textFields.add(textBox);
 	}
@@ -253,8 +255,8 @@ public class SettingsGui extends GuiScreen {
 		drawRect(guiX + 95, guiY + 36 + translateValue, (guiX + guiWidth) - 10, guiY + 76 + translateValue, 0xFF303b52);
 		drawRect(guiX + 95, guiY + 36 + translateValue, (guiX + guiWidth) - 10, guiY + 56 + translateValue, 0xFF212939);
 
-		fontRendererObj.drawString(title, guiX + 100, guiY + 41 + translateValue, 0xFFffffff);
-		fontRendererObj.drawString(description, guiX + 100, guiY + 62 + translateValue, 0xFF808080);
+		fontRenderer.drawString(title, guiX + 100, guiY + 41 + translateValue, 0xFFffffff);
+		fontRenderer.drawString(description, guiX + 100, guiY + 62 + translateValue, 0xFF808080);
 	}
 
 	private void addCategory() {
