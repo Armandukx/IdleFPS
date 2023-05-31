@@ -1,4 +1,4 @@
-<h1 align="center">IdleFPS</h1>
+<h1 align="center">Idle Tweaks</h1>
 
 <div align="center">
     <a href="https://github.com/Armandukx/IdleFPS/releases/latest" target="_blank">
