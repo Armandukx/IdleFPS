@@ -1,5 +1,5 @@
 /*
- * ArmandukxSB - A customizable quality of life mod for Hypixel Skyblock
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify

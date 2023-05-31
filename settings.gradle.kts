@@ -18,4 +18,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "IdleFPS"
+rootProject.name = "IdleTweaks"

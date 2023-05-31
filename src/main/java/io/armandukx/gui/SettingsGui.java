@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 package io.armandukx.gui;
 
-import io.armandukx.IdleFPS;
+import io.armandukx.IdleTweaks;
 import io.armandukx.config.ConfigHandler;
 import io.armandukx.gui.component.ToggleButton;
 import io.armandukx.utils.GuiUtils;
@@ -57,19 +57,19 @@ public class SettingsGui extends GuiScreen {
 				0,
 				new GuiPage()
 						.addButtons(
-								() -> addButton(0,0, IdleFPS.config.bFpsToggle),
-								() -> addButton(1,2, IdleFPS.config.bDistToggle)
+								() -> addButton(0,0, IdleTweaks.config.bFpsToggle),
+								() -> addButton(1,2, IdleTweaks.config.bDistToggle)
 						)
 						.addTextFields(
-								() -> addTextField(0, 1, IdleFPS.config.backgroundFps)
-								//() -> addTextField(1, 3, IdleFPS.config.backgroundRenderDist)
+								() -> addTextField(0, 1, IdleTweaks.config.backgroundFps),
+								() -> addTextField(1, 3, IdleTweaks.config.backgroundRenderDist)
 						)
 						.addSettings(
 								() -> addSetting("Background FPS Toggle","To enable or disable the 'Background FPS' feature", 0),
 								() -> addSetting("Background FPS","The limit for FPS when minecraft is in background", 1),
 
-								() -> addSetting("Background Render Distance Toggle","Changes the render distance to 2 when MC in background", 2)
-								//() -> addSetting("Background Render Distance","The limit for Render Distance when minecraft is in background", 3) Later Update (I cant figure out the bug)
+								() -> addSetting("Background Render Distance Toggle","Changes the render distance to 2 when MC in background", 2),
+								() -> addSetting("Background Render Distance","The limit for Render Distance when minecraft is in background", 3)
 						)
 		);
 	}
@@ -101,7 +101,7 @@ public class SettingsGui extends GuiScreen {
 		drawRect(guiX, guiY, guiX + guiWidth, guiY + guiHeight, 0xF2181c25);
 		GuiUtils.applyGl(() -> {
 			GlStateManager.scale(2, 2, 1);
-			fontRendererObj.drawStringWithShadow("ArmandukxSB", guiX / 2F + 5, guiY / 2F + 5, 0xFF28709e);
+			fontRendererObj.drawStringWithShadow(IdleTweaks.NAME, guiX / 2F + 5, guiY / 2F + 5, 0xFF28709e);
 			GuiUtils.drawHorizontalLine(guiX / 2 + 5, (guiX + guiWidth) / 2 - 5, guiY / 2 + 16, 0xFF28709e);
 			GuiUtils.drawVerticalLine(guiX / 2 + 45, guiY / 2 + 16, (guiY + guiHeight) / 2 - 5, 0xFF28709e);
 		});
@@ -129,14 +129,14 @@ public class SettingsGui extends GuiScreen {
 		if (pageNum == 0) {
 			switch (button.id) {
 				case 0:
-					IdleFPS.config.bFpsToggle = !IdleFPS.config.bFpsToggle;
-					ConfigHandler.writeBooleanConfig("general", "bFpsToggle", IdleFPS.config.bFpsToggle);
-					button.displayString = IdleFPS.config.bFpsToggle ? "On" : "Off";
+					IdleTweaks.config.bFpsToggle = !IdleTweaks.config.bFpsToggle;
+					ConfigHandler.writeBooleanConfig("general", "bFpsToggle", IdleTweaks.config.bFpsToggle);
+					button.displayString = IdleTweaks.config.bFpsToggle ? "On" : "Off";
 					break;
 				case 1:
-					IdleFPS.config.bDistToggle = !IdleFPS.config.bDistToggle;
-					ConfigHandler.writeBooleanConfig("general", "bDistToggle", IdleFPS.config.bDistToggle);
-					button.displayString = IdleFPS.config.bDistToggle ? "On" : "Off";
+					IdleTweaks.config.bDistToggle = !IdleTweaks.config.bDistToggle;
+					ConfigHandler.writeBooleanConfig("general", "bDistToggle", IdleTweaks.config.bDistToggle);
+					button.displayString = IdleTweaks.config.bDistToggle ? "On" : "Off";
 					break;
 			}
 		}
@@ -154,24 +154,25 @@ public class SettingsGui extends GuiScreen {
 	public void onGuiClosed() {
 		for (GuiTextField textField : textFields) {
 			if (pageNum == 0) {
-				if (textField.getId() == 0) {
-					String backgroundFps = textField.getText();
-					int fps = Integer.parseInt(backgroundFps);
-					if (fps >= 1 && fps <= 100) {
-						IdleFPS.config.backgroundFps = backgroundFps;
-						ConfigHandler.writeStringConfig("general", "backgroundFps", IdleFPS.config.backgroundFps);
-					}
-						/*case 1:
+				switch (textField.getId()) {
+					case 0:
+						String backgroundFps = textField.getText();
+						int fps = Integer.parseInt(backgroundFps);
+						if (fps >= 1 && fps <= 100) {
+							IdleTweaks.config.backgroundFps = backgroundFps;
+							ConfigHandler.writeStringConfig("general", "backgroundFps", IdleTweaks.config.backgroundFps);
+							break;
+						}
+					case 1:
 						String backgroundDist = textField.getText();
 						int distance = Integer.parseInt(backgroundDist);
-						if (distance >= 2 && distance <= 32) {
-							IdleFPS.config.backgroundRenderDist = backgroundDist;
-							ConfigHandler.writeStringConfig("general", "backgroundDist", IdleFPS.config.backgroundRenderDist);
+						if (distance >= 0 && distance <= 32) {
+							IdleTweaks.config.backgroundRenderDist = backgroundDist;
+							ConfigHandler.writeStringConfig("general", "backgroundRenderDist", IdleTweaks.config.backgroundRenderDist);
 							break;
-						}break;*/
+						}
 				}
-				break;
-			}break;
+			}
 		}
 	}
 

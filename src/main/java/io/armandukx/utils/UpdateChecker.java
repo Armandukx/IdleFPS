@@ -1,5 +1,5 @@
 /*
- * ArmandukxSB - A customizable quality of life mod for Hypixel Skyblock
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 package io.armandukx.utils;
 
 import com.google.gson.JsonObject;
-import io.armandukx.IdleFPS;
+import io.armandukx.IdleTweaks;
 import io.armandukx.handler.APIHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,21 +46,25 @@ public class UpdateChecker {
                 JsonObject latestRelease = APIHandler.getResponse("https://api.github.com/repos/Armandukx/IdleFPS/releases/latest", false);
 
                 String latestTag = latestRelease.get("tag_name").getAsString();
-                DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(IdleFPS.VERSION);
+                String McVersion = latestRelease.get("name").getAsString();
+                DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(IdleTweaks.VERSION);
                 DefaultArtifactVersion latestVersion = new DefaultArtifactVersion(latestTag.substring(1));
 
-                if (currentVersion.compareTo(latestVersion) < 0) {
-                    String releaseURL = latestRelease.get("html_url").getAsString();
+                if (McVersion.contains("1.8.9")) {
+                    if (currentVersion.compareTo(latestVersion) < 0) {
+                        String releaseURL = latestRelease.get("html_url").getAsString();
 
-                    ChatComponentText update = new ChatComponentText(EnumChatFormatting.GREEN + "" + EnumChatFormatting.BOLD + "  [UPDATE]  ");
-                    update.setChatStyle(update.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));
+                        ChatComponentText update = new ChatComponentText(EnumChatFormatting.GREEN + "" + EnumChatFormatting.BOLD + "  [UPDATE]  ");
+                        update.setChatStyle(update.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));
 
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        player.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + IdleTweaks.prefix + EnumChatFormatting.DARK_RED + IdleTweaks.NAME + " is outdated. Please update to " + latestTag + ".\n").appendSibling(update));
                     }
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + IdleFPS.prefix + EnumChatFormatting.DARK_RED + IdleFPS.NAME + " is outdated. Please update to " + latestTag + ".\n").appendSibling(update));                }
+                }
             }).start();
         }
     }

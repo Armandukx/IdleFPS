@@ -1,5 +1,5 @@
 /*
- * IdleFPS - Limit FPS & Render Distance when Minecraft is in the background
+ * IdleTweaks - Enhances performance while Minecraft runs in the background
  * Copyright (c) 2023 Armandukx
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 package io.armandukx.command;
 
-import io.armandukx.IdleFPS;
+import io.armandukx.IdleTweaks;
 import io.armandukx.gui.SettingsGui;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -51,7 +51,7 @@ public class IFPSCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         final EntityPlayer player = (EntityPlayer) sender;
         if (args.length == 0){
-            executor.submit(() -> IdleFPS.instance.getEventListener().setGuiToOpen(new SettingsGui()));
+            executor.submit(() -> IdleTweaks.instance.getEventListener().setGuiToOpen(new SettingsGui()));
         }
     }   public boolean canCommandSenderUseCommand(final ICommandSender sender) {return true;}
 }

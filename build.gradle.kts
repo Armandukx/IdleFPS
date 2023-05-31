@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.armandukx.archloomtemplate"
-version = "1.0.2"
+version = "1.0.3"
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
@@ -69,9 +69,9 @@ tasks.withType(JavaCompile::class) {
 }
 
 tasks.withType(Jar::class) {
-    archiveBaseName.set("IdleFPS")
+    archiveBaseName.set("IdleTweaks")
     manifest.attributes.run {
-        this["Main-Class"] = "IdleFPSInstallerFrame"
+        this["Main-Class"] = "IdleTweaksInstallerFrame"
         this["FMLCorePluginContainsFMLMod"] = "true"
         this["ForceLoadAsMod"] = "true"
         this["TweakClass"] = "org.spongepowered.asm.launch.MixinTweaker"
