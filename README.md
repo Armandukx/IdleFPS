@@ -14,7 +14,7 @@
         <img src="https://img.shields.io/github/downloads/Armandukx/IdleFPS/total?label=downloads&color=informational&logo=GitHub" alt="downloads">
     </a>
    <a href="https://modrinth.com/mod/idletweaks/versions" target="_blank">
-        <img src="https://img.shields.io/modrinth/dt/IdleFPS?label=downloads&color=informational&logo=Modrinth" alt="downloads">
+        <img src="https://img.shields.io/modrinth/dt/idletweaks?label=downloads&color=informational&logo=Modrinth" alt="downloads">
     </a>
 </div>
 
