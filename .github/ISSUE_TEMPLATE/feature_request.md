@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for IdleFPS
+about: Suggest an idea for IdleTweaks
 title: ''
 labels: ''
 assignees: ''
