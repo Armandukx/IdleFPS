@@ -18,63 +18,56 @@
 
 package io.armandukx.handler;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 public class APIHandler {
     public static JsonObject getResponse(String urlString, boolean hasError) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-
         try {
             URL url = new URL(urlString);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("User-Agent", "idt/1.0");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
 
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-                String input;
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
-
-                while ((input = in.readLine()) != null) {
-                    response.append(input);
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
                 }
-                in.close();
+                reader.close();
 
-                Gson gson = new Gson();
+                connection.disconnect();
 
-                return gson.fromJson(response.toString(), JsonObject.class);
-            } else {
-                if (hasError) {
-                    InputStream errorStream = conn.getErrorStream();
-                    try (Scanner scanner = new Scanner(errorStream)) {
-                        scanner.useDelimiter("\\Z");
-                        String error = scanner.next();
-
-                        Gson gson = new Gson();
-                        return gson.fromJson(error, JsonObject.class);
-                    }
+                JsonParser jsonParser = new JsonParser();
+                JsonElement jsonElement = jsonParser.parse(response.toString());
+                if (jsonElement.isJsonObject()) {
+                    return jsonElement.getAsJsonObject();
                 } else {
-                    player.sendMessage(new TextComponentString(TextFormatting.DARK_RED + "Request failed. HTTP Error Code: " + conn.getResponseCode()));
+                    System.out.println("Invalid JSON response");
                 }
+            } else {
+                System.out.println("HTTP request failed with response code: " + responseCode);
             }
-        } catch (IOException ex) {
-            player.sendMessage(new TextComponentString(TextFormatting.DARK_RED + "An error has occurred. See logs for more details."));
-            ex.printStackTrace();
+
+            connection.disconnect();
+
         }
-        return new JsonObject();
+        catch (IOException e) {
+            if (hasError) {
+                e.printStackTrace();
+            } else {
+                System.out.println("Error occurred while performing HTTP request: " + e.getMessage());
+            }
+        }
+        return null;
     }
 }

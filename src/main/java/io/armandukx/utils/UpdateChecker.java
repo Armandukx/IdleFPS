@@ -21,7 +21,7 @@ package io.armandukx.utils;
 import com.google.gson.JsonObject;
 import io.armandukx.IdleTweaks;
 import io.armandukx.handler.APIHandler;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
@@ -36,37 +36,37 @@ public class UpdateChecker {
     @SubscribeEvent
     public void onJoin(EntityJoinWorldEvent event) {
         if (!updateChecked) {
-            if (event.getEntity() instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) event.getEntity();
-                updateChecked = true;
+            updateChecked = true;
 
-                new Thread(() -> {
+            new Thread(() -> {
+                Minecraft mc = Minecraft.getMinecraft();
+                System.out.println("Checking for updates...");
+                JsonObject latestRelease = APIHandler.getResponse("https://api.modrinth.com/updates/Vnjlu1sC/forge_updates.json", false);
 
-                    System.out.println("Checking for updates...");
-                    JsonObject latestRelease = APIHandler.getResponse("https://api.github.com/repos/Armandukx/IdleFPS/releases/latest", false);
+                System.out.println("Has promos?");
+                if (latestRelease != null && latestRelease.has("promos")) {
+                    JsonObject promos = latestRelease.getAsJsonObject("promos");
+                    if (promos.has("1.12.2-recommended")) {
+                        String recommendedVersion = promos.get("1.12.2-recommended").getAsString().substring(1);
 
-                    String latestTag = latestRelease.get("tag_name").getAsString();
-                    String McVersion = latestRelease.get("name").getAsString();
-                    DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(IdleTweaks.VERSION);
-                    DefaultArtifactVersion latestVersion = new DefaultArtifactVersion(latestTag.substring(1));
+                        DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(IdleTweaks.VERSION);
+                        DefaultArtifactVersion latestVersion = new DefaultArtifactVersion(recommendedVersion);
 
-                    if (McVersion.contains("1.12.2")) {
                         if (currentVersion.compareTo(latestVersion) < 0) {
-                            String releaseURL = latestRelease.get("html_url").getAsString();
+                            String releaseURL = "https://modrinth.com/mod/Vnjlu1sC/versions";
 
                             TextComponentString update = new TextComponentString(TextFormatting.GREEN + "" + TextFormatting.BOLD + "  [UPDATE]  ");
                             update.setStyle(update.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));
-
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException ex) {
                                 ex.printStackTrace();
                             }
-                            player.sendMessage(new TextComponentString(TextFormatting.BOLD + IdleTweaks.prefix + TextFormatting.DARK_RED + IdleTweaks.NAME + " is outdated. Please update to " + latestTag + ".\n").appendSibling(update));
+                            mc.player.sendMessage(new TextComponentString( TextFormatting.BOLD + IdleTweaks.prefix + TextFormatting.DARK_RED + IdleTweaks.NAME+ " " + IdleTweaks.VERSION + " is outdated. Please update to " + latestVersion + ".\n").appendSibling(update));
                         }
                     }
-                }).start();
-            }
+                }
+            }).start();
         }
     }
 }

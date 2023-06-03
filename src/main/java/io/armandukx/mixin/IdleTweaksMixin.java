@@ -41,9 +41,9 @@ public abstract class IdleTweaksMixin {
                 if (IdleTweaks.config.bDistToggle) {
                     gameSettings.renderDistanceChunks = Integer.parseInt(IdleTweaks.config.backgroundRenderDist);
                 }
-            } else if (Display.isActive()) {
+            } else {
                 if (Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen.getClass().getName().equals("net.minecraft.client.gui.GuiVideoSettings")) {
-                    System.out.println("In Settings"); // For Debugging (I know its shit)
+                    System.out.println("In Settings"); // For Debugging (I know not ideal)
                 } else {
                     if (IdleTweaks.config.bFpsToggle) {
                         gameSettings.limitFramerate = IdleTweaks.fps;
@@ -63,12 +63,12 @@ public abstract class IdleTweaksMixin {
         int currentFps = gameSettings.limitFramerate;
         int currentDist = gameSettings.renderDistanceChunks;
 
-        if (currentFps != IdleTweaks.fps && currentFps >= Integer.parseInt(IdleTweaks.config.backgroundFps) + 1) {
+        if (currentFps != IdleTweaks.fps && (currentFps >= Integer.parseInt(IdleTweaks.config.backgroundFps) + 1) || (currentFps <= Integer.parseInt(IdleTweaks.config.backgroundFps) - 1)) {
             IdleTweaks.fps = currentFps;
             gameSettings.saveOptions();
         }
 
-        if (currentDist != IdleTweaks.renderDistance && currentDist >= Integer.parseInt(IdleTweaks.config.backgroundRenderDist) + 1) {
+        if (currentDist != IdleTweaks.renderDistance && (currentDist >= Integer.parseInt(IdleTweaks.config.backgroundRenderDist) + 1) || (currentDist <= Integer.parseInt(IdleTweaks.config.backgroundRenderDist) - 1)) {
             IdleTweaks.renderDistance = currentDist;
             gameSettings.saveOptions();
         }
