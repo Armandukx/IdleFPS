@@ -1,0 +1,2 @@
+v1	named	intermediary
+FIELD	io/armandukx/mixin/IdleTweaksMixin	Lnet/minecraft/client/settings/GameSettings;	gameSettings	field_71474_y

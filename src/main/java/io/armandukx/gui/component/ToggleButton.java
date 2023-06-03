@@ -24,12 +24,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-/**
- * Code was taken from ArmandukxSB under GNU Affero General Public License v3.0
- *
- * @author Armandukx
- * @link https://github.com/Armandukx/ArmandukxSB/blob/main/LICENSE
- */
+
 @SideOnly(Side.CLIENT)
 public class ToggleButton extends GuiButton {
 

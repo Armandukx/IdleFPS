@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Main-Class: IdleTweaksInstallerFrame
+FMLCorePluginContainsFMLMod: true
+ForceLoadAsMod: true
+TweakClass: org.spongepowered.asm.launch.MixinTweaker
+MixinConfigs: mixins.armandukx.json
+

@@ -21,12 +21,7 @@ package io.armandukx.utils.structs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-/**
- * Code was taken from ArmandukxSB under GNU Affero General Public License v3.0
- *
- * @author Armandukx
- * @link https://github.com/Armandukx/ArmandukxSB/blob/main/LICENSE
- */
+
 public class GuiPage {
 
 	private final List<Runnable> buttons = new ArrayList<>();

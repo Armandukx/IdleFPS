@@ -18,12 +18,7 @@
 
 package io.armandukx.utils;
 import java.util.concurrent.*;
-/**
- * Code was taken from ArmandukxSB under GNU Affero General Public License v3.0
- *
- * @author Armandukx
- * @link https://github.com/Armandukx/ArmandukxSB/blob/main/LICENSE
- */
+
 public class ExceptionExecutor extends ThreadPoolExecutor {
 
 	public ExceptionExecutor() {

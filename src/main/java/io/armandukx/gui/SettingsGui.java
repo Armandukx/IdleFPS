@@ -66,9 +66,9 @@ public class SettingsGui extends GuiScreen {
 						)
 						.addSettings(
 								() -> addSetting("Background FPS Toggle","To enable or disable the 'Background FPS' feature", 0),
-								() -> addSetting("Background FPS","The limit for FPS when minecraft is in background", 1),
+								() -> addSetting("Background Render Distance Toggle","To enable or disable the 'Background Render Distance' feature", 2),
 
-								() -> addSetting("Background Render Distance Toggle","Changes the render distance to 2 when MC in background", 2),
+								() -> addSetting("Background FPS","The limit for FPS when minecraft is in background", 1),
 								() -> addSetting("Background Render Distance","The limit for Render Distance when minecraft is in background", 3)
 						)
 		);

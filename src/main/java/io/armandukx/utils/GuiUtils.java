@@ -24,12 +24,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
-/**
- * Code was taken from ArmandukxSB under GNU Affero General Public License v3.0
- *
- * @author Armandukx
- * @link https://github.com/Armandukx/ArmandukxSB/blob/main/LICENSE
- */
 public class GuiUtils {
 
 	public static void applyGLScissors(double x, double y, double width, double height) {

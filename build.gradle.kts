@@ -6,13 +6,20 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-group = "io.armandukx.archloomtemplate"
-version = "1.0.3"
+//Constants:
 
+val baseGroup: String by project
+val mcVersion: String by project
+val version: String by project
+val mixinGroup = "$baseGroup.mixin"
+val modid = rootProject.name.toLowerCase()
+
+// Toolchains:
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 }
 
+// Minecraft configuration:
 loom {
     log4jConfigs.from(file("log4j2.xml"))
     launchConfigs {
@@ -36,6 +43,8 @@ sourceSets.main {
     output.setResourcesDir(file("$buildDir/classes/java/main"))
 }
 
+// Dependencies:
+
 repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
@@ -46,30 +55,23 @@ val shadowImpl: Configuration by configurations.creating {
 }
 
 dependencies {
-    implementation("org.projectlombok:lombok:1.18.22")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
-
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
-    annotationProcessor("org.spongepowered:mixin:0.8.4-SNAPSHOT")
 
 }
 
-tasks.processResources {
-    inputs.property("version", version)
-    filesMatching("mcmod.info") {
-        expand("version" to version)
-    }
-}
+// Tasks:
+
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
 }
 
 tasks.withType(Jar::class) {
-    archiveBaseName.set("IdleTweaks")
+    archiveBaseName.set(modid)
     manifest.attributes.run {
         this["Main-Class"] = "IdleTweaksInstallerFrame"
         this["FMLCorePluginContainsFMLMod"] = "true"
@@ -79,6 +81,19 @@ tasks.withType(Jar::class) {
     }
 }
 
+tasks.processResources {
+    inputs.property("version", project.version)
+    inputs.property("mcversion", mcVersion)
+    inputs.property("modid", modid)
+    inputs.property("mixinGroup", mixinGroup)
+
+    filesMatching(listOf("mcmod.info", "mixins.armandukx.json")) {
+        expand(inputs.properties)
+    }
+
+    rename("(.+_at.cfg)", "META-INF/$1")
+}
+
 
 val remapJar by tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     archiveClassifier.set("")
@@ -86,16 +101,22 @@ val remapJar by tasks.named<net.fabricmc.loom.task.RemapJarTask>("remapJar") {
     input.set(tasks.shadowJar.get().archiveFile)
 }
 
+tasks.jar {
+    archiveClassifier.set("without-deps")
+    destinationDirectory.set(layout.buildDirectory.dir("badjars"))
+}
+
 tasks.shadowJar {
+    destinationDirectory.set(layout.buildDirectory.dir("badjars"))
     archiveClassifier.set("all-dev")
     configurations = listOf(shadowImpl)
     doLast {
         configurations.forEach {
-            println("Config: ${it.files}")
+            println("Copying jars into mod: ${it.files}")
         }
     }
 
-    fun relocate(name: String) = relocate(name, "io.armandukx.deps.$name")
+    fun relocate(name: String) = relocate(name, "$baseGroup.deps.$name")
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)

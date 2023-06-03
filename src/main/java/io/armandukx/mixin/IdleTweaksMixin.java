@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.settings.GameSettings;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,11 +32,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class IdleTweaksMixin {
 
+    @Shadow
+    public GameSettings gameSettings;
+
     @Inject(method = "updateDisplay", at = @At("HEAD"))
     private void onUpdateDisplay(CallbackInfo callbackInfo) {
         if (Display.isCloseRequested() || Minecraft.getMinecraft().theWorld == null) return;
-        GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
-        Minecraft.getMinecraft().addScheduledTask(() -> {
+        new Thread(() -> Minecraft.getMinecraft().addScheduledTask(() -> {
             if (!Display.isActive()) {
                 if (IdleTweaks.config.bFpsToggle) {
                     gameSettings.limitFramerate = Integer.parseInt(IdleTweaks.config.backgroundFps);
@@ -43,36 +46,41 @@ public abstract class IdleTweaksMixin {
                 if (IdleTweaks.config.bDistToggle) {
                     gameSettings.renderDistanceChunks = Integer.parseInt(IdleTweaks.config.backgroundRenderDist);
                 }
-            } else if (Display.isActive()) {
-                if (Minecraft.getMinecraft().currentScreen instanceof GuiOptions){
-                    System.out.println("In Settings"); // For Debugging (I know its shit)
-                }else {
-                    if (IdleTweaks.config.bFpsToggle) {
-                        gameSettings.limitFramerate = IdleTweaks.fps;
-                    }
-                    if (IdleTweaks.config.bDistToggle) {
-                        gameSettings.renderDistanceChunks = IdleTweaks.renderDistance;
-                    }
+            } else if (Display.isActive() && Minecraft.getMinecraft().currentScreen instanceof GuiOptions) {
+                System.out.println("In Settings"); // For Debugging (I know it's not ideal)
+            } else {
+                if (IdleTweaks.config.bFpsToggle) {
+                    gameSettings.limitFramerate = IdleTweaks.fps;
+                }
+                if (IdleTweaks.config.bDistToggle) {
+                    gameSettings.renderDistanceChunks = IdleTweaks.renderDistance;
                 }
             }
-        });
+        })).start();
     }
 
     @Inject(method = "runTick", at = @At("RETURN"))
     private void onRunTick(CallbackInfo callbackInfo) {
         if (!Display.isActive()) return;
-        GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
         int currentFps = gameSettings.limitFramerate;
         int currentDist = gameSettings.renderDistanceChunks;
 
-        if (currentFps != IdleTweaks.fps && currentFps >= Integer.parseInt(IdleTweaks.config.backgroundFps) + 1) {
-            IdleTweaks.fps = currentFps;
+        if (currentFps != IdleTweaks.fps && (IdleTweaks.fps = getUpdatedValue(currentFps, Integer.parseInt(IdleTweaks.config.backgroundFps))) != currentFps) {
             gameSettings.saveOptions();
         }
 
-        if (currentDist != IdleTweaks.renderDistance && currentDist >= Integer.parseInt(IdleTweaks.config.backgroundRenderDist) + 1) {
-            IdleTweaks.renderDistance = currentDist;
+        if (currentDist != IdleTweaks.renderDistance && (IdleTweaks.renderDistance = getUpdatedValue(currentDist, Integer.parseInt(IdleTweaks.config.backgroundRenderDist))) != currentDist) {
             gameSettings.saveOptions();
+        }
+    }
+
+    private int getUpdatedValue(int currentValue, int targetValue) {
+        if (currentValue > targetValue) {
+            return Math.max(targetValue + 1, currentValue);
+        } else if (currentValue < targetValue) {
+            return Math.min(targetValue - 1, currentValue);
+        } else {
+            return currentValue;
         }
     }
 }
