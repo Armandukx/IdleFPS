@@ -53,7 +53,7 @@ public class UpdateChecker {
                         DefaultArtifactVersion latestVersion = new DefaultArtifactVersion(recommendedVersion);
 
                         if (currentVersion.compareTo(latestVersion) < 0) {
-                            String releaseURL = "https://modrinth.com/mod/Vnjlu1sC/versions";
+                            String releaseURL = "https://modrinth.com/mod/Vnjlu1sC/versions?g=1.8.9";
 
                             ChatComponentText update = new ChatComponentText(EnumChatFormatting.GREEN + "" + EnumChatFormatting.BOLD + "  [UPDATE]  ");
                             update.setChatStyle(update.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));

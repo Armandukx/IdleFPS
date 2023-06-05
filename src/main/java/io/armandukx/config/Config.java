@@ -24,4 +24,5 @@ public class Config
     public String backgroundFps;
     public boolean bFpsToggle;
     public boolean bDistToggle;
+    public boolean bVolumeToggle;
 }

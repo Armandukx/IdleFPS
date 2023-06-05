@@ -58,15 +58,17 @@ public class SettingsGui extends GuiScreen {
 				new GuiPage()
 						.addButtons(
 								() -> addButton(0,0, IdleTweaks.config.bFpsToggle),
-								() -> addButton(1,2, IdleTweaks.config.bDistToggle)
+								() -> addButton(1,2, IdleTweaks.config.bDistToggle),
+								() -> addButton(2,4, IdleTweaks.config.bVolumeToggle)
 						)
 						.addTextFields(
 								() -> addTextField(0, 1, IdleTweaks.config.backgroundFps),
 								() -> addTextField(1, 3, IdleTweaks.config.backgroundRenderDist)
 						)
 						.addSettings(
-								() -> addSetting("Background FPS Toggle","To enable or disable the 'Background FPS' feature", 0),
-								() -> addSetting("Background Render Distance Toggle","To enable or disable the 'Background Render Distance' feature", 2),
+								() -> addSetting("Background FPS Control","This feature allows you to enable or disable the 'Background FPS' setting", 0),
+								() -> addSetting("Background Render Distance Control","This feature allows you to enable or disable the 'Background Render Distance' setting", 2),
+								() -> addSetting("Mute Sounds","This setting mutes all sounds in Minecraft when the game is not in focus", 4),
 
 								() -> addSetting("Background FPS","The limit for FPS when minecraft is in background", 1),
 								() -> addSetting("Background Render Distance","The limit for Render Distance when minecraft is in background", 3)
@@ -137,6 +139,11 @@ public class SettingsGui extends GuiScreen {
 					IdleTweaks.config.bDistToggle = !IdleTweaks.config.bDistToggle;
 					ConfigHandler.writeBooleanConfig("general", "bDistToggle", IdleTweaks.config.bDistToggle);
 					button.displayString = IdleTweaks.config.bDistToggle ? "On" : "Off";
+					break;
+				case 2:
+					IdleTweaks.config.bVolumeToggle = !IdleTweaks.config.bVolumeToggle;
+					ConfigHandler.writeBooleanConfig("general", "bVolumeToggle", IdleTweaks.config.bVolumeToggle);
+					button.displayString = IdleTweaks.config.bVolumeToggle ? "On" : "Off";
 					break;
 			}
 		}

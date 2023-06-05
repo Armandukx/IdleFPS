@@ -123,6 +123,7 @@ public class ConfigHandler {
         // General
         IdleTweaks.config.bFpsToggle = initBoolean("general", "bFpsToggle", true);
         IdleTweaks.config.bDistToggle = initBoolean("general", "bDistToggle", false);
+        IdleTweaks.config.bVolumeToggle = initBoolean("general", "bVolumeToggle", true);
         IdleTweaks.config.backgroundFps = initString("general", "backgroundFps", "1");
         IdleTweaks.config.backgroundRenderDist = initString("general", "backgroundRenderDist", "2");
     }
