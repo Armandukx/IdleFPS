@@ -1,5 +1,5 @@
 {
-  "package": "io.armandukx.mixin",
+  "package": "io.armandukx.idletweaks.mixin",
   "refmap": "mixins.armandukx.refmap.json",
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",

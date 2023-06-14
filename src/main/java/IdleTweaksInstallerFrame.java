@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import io.armandukx.IdleTweaks;
+import io.armandukx.idletweaks.IdleTweaks;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
