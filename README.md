@@ -35,4 +35,4 @@ For seamless installation and optimal utilization of the mod, don't hesitate to 
 
 # License
 
-This project operates under the Attribution-NonCommercial-NoDerivatives 4.0 International, ensuring open-source accessibility. For further information, please refer to the [LICENSE](COPYING) file.
+This project operates under the Attribution-NonCommercial-NoDerivatives 4.0 International. For further information, please refer to the [LICENSE](COPYING) file.
