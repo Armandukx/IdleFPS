@@ -1,0 +1,10 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="GNU General Public License v3.0"
+[[mods]]
+modId="idletweaks"
+version="${file.jarVersion}"
+displayName="IdleTweaks"
+logoFile="logo.png"
+authors="Armandukx"
+description="Reduces Minecraft's resource usage while it runs in the background."

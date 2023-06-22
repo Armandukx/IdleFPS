@@ -1,0 +1,7 @@
+{
+    "pack": {
+        "description": "IdleTweaks resources",
+        "pack_format": 5,
+        "_comment": "Reduces Minecraft's resource usage while it runs in the background."
+    }
+}
