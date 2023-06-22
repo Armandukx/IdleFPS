@@ -21,7 +21,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class IdleTweaks {
     public static final String NAME = "IdleTweaks";
     public static final String MODID = "idletweaks";
-    public static final String VERSION = "1.0.5";
+    public static final String VERSION = "1.0.6";
     public static final String prefix =
             TextFormatting.YELLOW + "[I" + TextFormatting.GREEN + "D" + TextFormatting.RED + "T] " + TextFormatting.RESET;
     private boolean retrieved = false;

@@ -12,7 +12,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-version = '1.0.5'
+version = '1.0.6'
 group = 'io.armandukx.idletweaks'
 archivesBaseName = 'IdleTweaks'
 
