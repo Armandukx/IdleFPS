@@ -33,6 +33,6 @@ More coming soon!
 
 For seamless installation and optimal utilization of the mod, don't hesitate to join our [Discord](https://discord.gg/MGrNJqsqZt) community, where you can directly reach out to Armandukx or create a ticket for prompt assistance.
 
-## License
+# License
 
-This project operates under the GNU General Public License v3.0, ensuring open-source accessibility. For further information, please refer to the [LICENSE](LICENSE) file.
+Unauthorized use of this project's code is strictly prohibited.
