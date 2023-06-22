@@ -5,7 +5,7 @@
         <img src="https://img.shields.io/github/v/release/Armandukx/IdleFPS?color=informational&include_prereleases&label=release&logo=github&logoColor=white" alt="release">
     </a>
     <a href="./LICENSE" target="_blank">
-        <img src="https://img.shields.io/github/license/Armandukx/IdleFPS?color=informational" alt="license">
+        <img src="https://img.shields.io/badge/license-CC_BY_NC_ND_4.0-blue" alt="license">
     </a>
     <a href="https://discord.gg/MGrNJqsqZt" target="_blank">
         <img src="https://img.shields.io/discord/1094419852040622150?label=discord&color=informational&logo=Discord&logoColor=FFFFFF" alt="discord">
