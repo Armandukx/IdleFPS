@@ -18,7 +18,7 @@
     </a>
 </div>
 
-<h4 align="center">Idle FPS adapts Minecraft's rendering speed to the user's settings, with a default value of 1 FPS when unfocused or hidden.</h4>
+<h4 align="center">Idle Tweaks Reduces Minecraft's resource usage while it runs in the background.</h4>
 
 <h1 align="center">Getting Started</h1>
 
