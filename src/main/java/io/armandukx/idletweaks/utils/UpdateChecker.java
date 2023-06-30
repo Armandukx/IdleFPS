@@ -1,0 +1,58 @@
+package io.armandukx.idletweaks.utils;
+
+import com.google.gson.JsonObject;
+import io.armandukx.idletweaks.IdleTweaks;
+import io.armandukx.idletweaks.handler.APIHandler;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+public class UpdateChecker {
+
+    static boolean updateChecked = false;
+
+    public static void init() {
+        if (MinecraftClient.getInstance().world == null) return;
+        ClientEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (!updateChecked) {
+                updateChecked = true;
+
+                new Thread(() -> {
+                    MinecraftClient mc = MinecraftClient.getInstance();
+                    System.out.println("Checking for updates...");
+                    JsonObject latestRelease = APIHandler.getResponse("https://api.modrinth.com/updates/Vnjlu1sC/forge_updates.json", false);
+
+                    System.out.println("Has promos?");
+                    if (latestRelease != null && latestRelease.has("promos")) {
+                        JsonObject promos = latestRelease.getAsJsonObject("promos");
+                        if (promos.has("1.17.1-recommended")) {
+                            String recommendedVersion = promos.get("1.17.1-recommended").getAsString().substring(1);
+
+                            String currentVersion = IdleTweaks.VERSION;
+
+                            if (currentVersion.compareTo(recommendedVersion) < 0) {
+                                String releaseURL = "https://modrinth.com/mod/Vnjlu1sC/versions?g=1.17.1";
+
+                                LiteralText update = new LiteralText(Formatting.GREEN + "" + Formatting.BOLD + "  [UPDATE]  ");
+                                update.setStyle(update.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, releaseURL)));
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
+                                if (mc.player != null){
+                                    MutableText message = new LiteralText(Formatting.BOLD + IdleTweaks.prefix + Formatting.DARK_RED + IdleTweaks.NAME + " " + IdleTweaks.VERSION + " is outdated. Please update to " + recommendedVersion + ".\n").append(update);
+                                    mc.player.sendMessage(Text.Serializer.fromJson(Text.Serializer.toJson(message)), false);
+                                }
+                            }
+                        }
+                    }
+                }).start();
+            }
+        });
+    }
+}
