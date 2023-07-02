@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "idletweaks",
+  "version": "${version}",
+
+  "name": "IdleTweaks",
+  "description": "Reduces Minecraft's resource usage while it runs in the background.",
+  "authors": [
+    "Armandukx"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/idletweaks",
+    "sources": "https://github.com/Armandukx/idlefps"
+  },
+
+  "license": "CC-BY-NC-ND 4.0",
+  "icon": "assets/idletweaks/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "io.armandukx.idletweaks.IdleTweaks"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": "~1.19.4",
+    "java": ">=17"
+  }
+}
