@@ -33,6 +33,11 @@ More coming soon!
 
 For seamless installation and optimal utilization of the mod, don't hesitate to join our [Discord](https://discord.gg/MGrNJqsqZt) community, where you can directly reach out to Armandukx or create a ticket for prompt assistance.
 
+## Where else is this avaliable?
+[![Get on Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_64h.png)](https://modrinth.com/mod/idletweaks) [![Source on Github](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/github_64h.png)](https://github.com/Armandukx/IdleFPS)
+#
+[![Discord Server](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_64h.png)](https://discord.gg/MGrNJqsqZt)
+
 # License
 
 This project operates under the Attribution-NonCommercial-NoDerivatives 4.0 International, ensuring open-source accessibility. For further information, please refer to the [LICENSE](COPYING) file.
