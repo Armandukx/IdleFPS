@@ -1,7 +1,7 @@
 <h1 align="center">Idle Tweaks</h1>
 
 <div align="center">
-<a href="https://modrinth.com/mod/idlefps/versions" target="_blank">
+<a href="https://modrinth.com/mod/idletweaks/versions" target="_blank">
         <img src="https://img.shields.io/modrinth/v/idletweaks?label=release&color=informational&logo=Modrinth" alt="release">
     </a>
  <a href="https://github.com/Armandukx/IdleFPS/blob/1.8.9/COPYING" target="_blank">
@@ -9,9 +9,6 @@
     </a>
     <a href="https://discord.gg/MGrNJqsqZt" target="_blank">
         <img src="https://img.shields.io/discord/1094419852040622150?label=discord&color=informational&logo=Discord&logoColor=FFFFFF" alt="discord">
-    </a>
-     <a href="https://github.com/Armandukx/IdleFPS/releases" target="_blank">
-        <img src="https://img.shields.io/github/downloads/Armandukx/IdleFPS/total?label=downloads&color=informational&logo=GitHub" alt="downloads">
     </a>
    <a href="https://modrinth.com/mod/idlefps/versions" target="_blank">
         <img src="https://img.shields.io/modrinth/dt/idletweaks?label=downloads&color=informational&logo=Modrinth" alt="downloads">
