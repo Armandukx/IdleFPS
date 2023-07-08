@@ -1,0 +1,69 @@
+plugins {
+	id 'fabric-loom' version '1.2.+'
+	id 'maven-publish'
+	id 'io.github.p03w.machete' version '2.0.0'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+
+	it.options.encoding = "UTF-8"
+
+	it.options.release = 17
+	
+	it.options.compilerArgs += ["-Xlint:deprecation"]
+}
+
+java {
+	withSourcesJar()
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'IdleTweaksInstallerFrame'
+	}
+}
+artifacts {
+	jar
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	repositories {
+	}
+}
