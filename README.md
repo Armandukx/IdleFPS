@@ -1,7 +1,7 @@
 <h1 align="center">Idle Tweaks</h1>
 
 <div align="center">
-<a href="https://modrinth.com/mod/idlefps/versions" target="_blank">
+<a href="https://modrinth.com/mod/idletweaks/versions" target="_blank">
         <img src="https://img.shields.io/modrinth/v/idletweaks?label=release&color=informational&logo=Modrinth" alt="release">
     </a>
  <a href="https://github.com/Armandukx/IdleFPS/blob/1.8.9/COPYING" target="_blank">
