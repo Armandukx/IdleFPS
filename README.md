@@ -27,6 +27,7 @@
 <li>Limits Minecraft's FPS when in the background (unfocused or tabbed out).</li>
 <li>Restricts Minecraft's render distance when in the background (unfocused or tabbed out).</li>
 <li>Mute Minecraft sounds (unfocused or tabbed out).</li>
+<li>Set a cooldown before the mod does anything.</li>
 <li>Checks for updates</li>
 
 More coming soon or you could suggest new feature(s) on our [Discord server](https://discord.gg/MGrNJqsqZt)!
