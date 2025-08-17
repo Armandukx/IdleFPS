@@ -2,6 +2,9 @@
 	"schemaVersion": 1,
 	"id": "idletweaks",
 	"version": "${version}",
+	"mixins": [
+		"mixins.idletweaks.json"
+	],
 
 	"name": "IdleTweaks",
 	"description": "Reduces Minecraft's resource usage while it runs in the background.",

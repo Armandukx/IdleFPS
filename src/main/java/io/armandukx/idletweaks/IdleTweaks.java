@@ -14,15 +14,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Formatting;
 
 public class IdleTweaks implements ClientModInitializer {
-    public static final String NAME = "IdleTweaks";
-    public static final String VERSION = "1.0.10";
+    public static final String VERSION = "1.1.0";
     public static final String prefix =
             Formatting.YELLOW + "[I" + Formatting.GREEN + "D" + Formatting.RED + "T] " + Formatting.RESET;
     public static int renderDistance = 0;
-    public static int fps = 10;
     private static boolean retrieved = false;
     public static boolean closing = false;
-    public static GameOptions gameSettings;
     private static Config config;
     public static boolean _STOPCHECKING = false;
 
@@ -32,43 +29,39 @@ public class IdleTweaks implements ClientModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, registrationEnvironment) -> IDTCommand.register(dispatcher));
         GameSettingsModifier.init();
 
-        if (config.bDistToggle && config.backgroundRenderDist == 0 || config.backgroundRenderDist == 1) {
+        if (config.bDistToggle && (config.backgroundRenderDist == 0 || config.backgroundRenderDist == 1)) {
             config.setBackgroundRenderDist(2);
         }
 
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            gameSettings = MinecraftClient.getInstance().options;
             if (!retrieved) {
-                fps = gameSettings.getMaxFps().getValue();
-                renderDistance = gameSettings.getViewDistance().getValue();
+                renderDistance = client.options.getViewDistance().getValue();
                 retrieved = true; // Just being careful
-                System.out.println(prefix + "Current Fps: " + fps + " Current Render Distance: " + renderDistance);
+
+                System.out.println(prefix + " Current Render Distance: " + renderDistance);
             }
         });
 
-        ClientLifecycleEvents.CLIENT_STOPPING.register(server -> {
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
             System.out.println("Minecraft is closing");
 
-            if (getConfig().bFpsToggle) {
-                GameSettingsModifier.setFpsLimit(fps);
-                gameSettings.write();
-                System.out.println(gameSettings.getMaxFps().getValue());
-            }
+            GameOptions GameSettings = client.options;
             if (getConfig().bDistToggle) {
-                gameSettings.getViewDistance().setValue(IdleTweaks.renderDistance);
-                gameSettings.write();
-                System.out.println(gameSettings.getViewDistance().getValue());
+                GameSettings.getViewDistance().setValue(IdleTweaks.renderDistance);
+                GameSettings.write();
+                System.out.println(GameSettings.getViewDistance().getValue());
             }
             if (getConfig().bVolumeToggle) {
-                if (gameSettings.getSoundVolume(SoundCategory.MASTER) <= 0) {
+                if (GameSettings.getSoundVolume(SoundCategory.MASTER) <= 0) {
                     MinecraftClient.getInstance().getSoundManager().resumeAll();
                 }
             }
             closing = true;
         });
 
-        ClientTickEvents.END_CLIENT_TICK.register(server -> {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!_STOPCHECKING){
+                _STOPCHECKING = true;
                 UpdateChecker.check();
             }
         });

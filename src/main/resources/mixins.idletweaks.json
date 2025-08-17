@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "io.armandukx.idletweaks.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "RenderHijacker"
+  ],
+  "client": [
+    "RenderHijacker"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

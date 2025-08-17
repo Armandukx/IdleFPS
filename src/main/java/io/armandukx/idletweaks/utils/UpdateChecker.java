@@ -12,35 +12,65 @@ public class UpdateChecker {
     private static final MinecraftClient mc = MinecraftClient.getInstance();
     public static void check() {
         if (mc.world != null) {
-            IdleTweaks._STOPCHECKING = true;
             new Thread(() -> {
                 System.out.println("Checking for updates...");
                 JsonArray releases = APIHandler.getArrayResponse("https://api.modrinth.com/v2/project/Vnjlu1sC/version");
-                if (releases.size() > 0) {
-                    String versionNumber = releases.get(0).getAsJsonObject().get("version_number").getAsString().substring(1);
+                if (!releases.isEmpty()) {
+                    String versionNumber = releases.get(0).getAsJsonObject().get("version_number").getAsString();
+                    if (versionNumber.startsWith("v") || versionNumber.startsWith("V")) {
+                        versionNumber = versionNumber.substring(1);
+                    }
+
+                    System.out.println("[IdleTweaks] Latest version string: " + versionNumber);
+
                     int[] IDTParts = convertVersionStringToIntArray(IdleTweaks.VERSION);
                     int[] versionNumberParts = convertVersionStringToIntArray(versionNumber);
+
                     int IDTVersionInt = convertVersionPartsToInt(IDTParts);
                     int versionNumberInt = convertVersionPartsToInt(versionNumberParts);
-                    System.out.println(versionNumberInt+IDTVersionInt);
-                    if (IDTVersionInt < versionNumberInt)
-                    {
-                        if (MinecraftClient.getInstance().player != null) {
-                            MinecraftClient.getInstance().player.sendMessage(Text.literal(Formatting.BOLD + IdleTweaks.prefix + Formatting.DARK_RED + "Idle Tweaks " + IdleTweaks.VERSION + " is outdated. Please update to " + versionNumber + ".\n"));
+
+                    System.out.println("[IdleTweaks] Installed version as int: " + IDTVersionInt);
+                    System.out.println("[IdleTweaks] Latest version as int: " + versionNumberInt);
+
+                    if (IDTVersionInt < versionNumberInt) {
+                        if (mc.player != null) {
+                            mc.player.sendMessage(Text.literal(
+                                    Formatting.BOLD + IdleTweaks.prefix + Formatting.DARK_RED +
+                                            "Idle Tweaks " + IdleTweaks.VERSION + " is outdated. Please update to " + versionNumber + ".\n"
+                            ));
                         }
+                        System.out.println("[IdleTweaks] Update available!");
+                    } else {
+                        System.out.println("[IdleTweaks] You are on the latest version.");
                     }
                 } else {
-                    System.out.println("No releases found.");
+                    System.out.println("[IdleTweaks] No releases found.");
                 }
             }).start();
         }
     }
 
     public static int[] convertVersionStringToIntArray(String version) {
+        version = version.trim();
+        if (version.startsWith("v") || version.startsWith("V")) {
+            version = version.substring(1);
+        }
+
         String[] parts = version.split("\\.");
         int[] intArray = new int[parts.length];
+
         for (int i = 0; i < parts.length; i++) {
-            intArray[i] = Integer.parseInt(parts[i]);
+            String p = parts[i].trim();
+            if (p.isEmpty()) {
+                intArray[i] = 0;
+            } else {
+                try {
+                    intArray[i] = Integer.parseInt(p);
+                } catch (NumberFormatException e) {
+                    intArray[i] = 0;
+                    System.err.println("[IdleTweaks] Warning: invalid version part '" + p + "' in version string: " + version);
+                }
+            }
         }
         return intArray;
     }

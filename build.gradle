@@ -4,10 +4,6 @@ plugins {
 	id 'io.github.p03w.machete' version '2.0.0'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
@@ -30,20 +26,15 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-
-	it.options.encoding = "UTF-8"
-
-	it.options.release = 21
-	
-	it.options.compilerArgs += ["-Xlint:deprecation"]
-}
-
 java {
 	withSourcesJar()
-
 	sourceCompatibility = JavaVersion.VERSION_21
 	targetCompatibility = JavaVersion.VERSION_21
+}
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 21
+	it.options.compilerArgs += ["-Xlint:deprecation"]
 }
 
 jar {
@@ -66,7 +57,8 @@ publishing {
 			}
 		}
 	}
-
 	repositories {
+		mavenCentral()
+		maven { url = 'https://maven.fabricmc.net/' }
 	}
 }
