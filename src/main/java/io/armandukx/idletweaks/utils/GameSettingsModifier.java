@@ -19,22 +19,24 @@ public class GameSettingsModifier {
             Screen current = client.currentScreen;
 
             boolean focused = client.isWindowFocused();
+            long now = System.currentTimeMillis();
+
             if (!focused) {
                 if (lastFocusLoss == 0) {
-                    lastFocusLoss = System.currentTimeMillis();
+                    lastFocusLoss = now;
                 }
 
-                long elapsed = System.currentTimeMillis() - lastFocusLoss;
+                long elapsed = now - lastFocusLoss;
                 if (!idleActive && elapsed >= IdleTweaks.getConfig().Cooldown * 1000L) {
                     enableIdleMode(client, gameSettings);
                 }
             } else {
-                lastFocusLoss = 0;
-                if (idleActive) {
-                    // don't override while in Options screens
-                    if (!(current instanceof OptionsScreen)) {
-                        disableIdleMode(client, gameSettings);
-                    }
+                // Only reset lastFocusLoss if it was set before
+                if (lastFocusLoss != 0) lastFocusLoss = 0;
+
+                // Deactivate idle mode if currently active and not in any "protected" screen
+                if (idleActive && (!(current instanceof OptionsScreen))) {
+                    disableIdleMode(client, gameSettings);
                 }
             }
         });
