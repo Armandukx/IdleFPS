@@ -14,7 +14,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Formatting;
 
 public class IdleTweaks implements ClientModInitializer {
-    public static final String VERSION = "1.1.0";
+    public static final String VERSION = "1.1.1";
     public static final String prefix =
             Formatting.YELLOW + "[I" + Formatting.GREEN + "D" + Formatting.RED + "T] " + Formatting.RESET;
     public static int renderDistance = 0;
