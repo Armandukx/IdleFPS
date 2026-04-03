@@ -60,9 +60,9 @@ public class IdleTweaks implements ClientModInitializer {
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (!_STOPCHECKING){
+            if (!_STOPCHECKING && client.player != null && client.world != null) {
                 _STOPCHECKING = true;
-                UpdateChecker.check();
+                new Thread(UpdateChecker::check).start();
             }
         });
     }

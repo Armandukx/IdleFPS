@@ -12,41 +12,44 @@ public class UpdateChecker {
     private static final MinecraftClient mc = MinecraftClient.getInstance();
     public static void check() {
         if (mc.world != null) {
-            new Thread(() -> {
-                System.out.println("Checking for updates...");
-                JsonArray releases = APIHandler.getArrayResponse("https://api.modrinth.com/v2/project/Vnjlu1sC/version");
-                if (!releases.isEmpty()) {
-                    String versionNumber = releases.get(0).getAsJsonObject().get("version_number").getAsString();
-                    if (versionNumber.startsWith("v") || versionNumber.startsWith("V")) {
-                        versionNumber = versionNumber.substring(1);
-                    }
+            System.out.println("Checking for updates...");
+            JsonArray releases = APIHandler.getArrayResponse("https://api.modrinth.com/v2/project/Vnjlu1sC/version");
+            if (!releases.isEmpty()) {
+                String versionNumber = releases.get(0).getAsJsonObject().get("version_number").getAsString();
+                if (versionNumber.startsWith("v") || versionNumber.startsWith("V")) {
+                    versionNumber = versionNumber.substring(1);
+                }
 
-                    System.out.println("[IdleTweaks] Latest version string: " + versionNumber);
+                System.out.println("[IdleTweaks] Latest version string: " + versionNumber);
 
-                    int[] IDTParts = convertVersionStringToIntArray(IdleTweaks.VERSION);
-                    int[] versionNumberParts = convertVersionStringToIntArray(versionNumber);
+                int[] IDTParts = convertVersionStringToIntArray(IdleTweaks.VERSION);
+                int[] versionNumberParts = convertVersionStringToIntArray(versionNumber);
 
-                    int IDTVersionInt = convertVersionPartsToInt(IDTParts);
-                    int versionNumberInt = convertVersionPartsToInt(versionNumberParts);
+                int IDTVersionInt = convertVersionPartsToInt(IDTParts);
+                int versionNumberInt = convertVersionPartsToInt(versionNumberParts);
 
-                    System.out.println("[IdleTweaks] Installed version as int: " + IDTVersionInt);
-                    System.out.println("[IdleTweaks] Latest version as int: " + versionNumberInt);
+                System.out.println("[IdleTweaks] Installed version as int: " + IDTVersionInt);
+                System.out.println("[IdleTweaks] Latest version as int: " + versionNumberInt);
 
-                    if (IDTVersionInt < versionNumberInt) {
-                        if (mc.player != null) {
-                            mc.player.sendMessage(Text.literal(
-                                    Formatting.BOLD + IdleTweaks.prefix + Formatting.DARK_RED +
-                                            "Idle Tweaks " + IdleTweaks.VERSION + " is outdated. Please update to " + versionNumber + ".\n"
-                            ));
-                        }
-                        System.out.println("[IdleTweaks] Update available!");
-                    } else {
-                        System.out.println("[IdleTweaks] You are on the latest version.");
+                if (IDTVersionInt < versionNumberInt) {
+                    System.out.println("[IdleTweaks] Update available!");
+                    if (mc.player != null) {
+                        // Schedule on main thread
+                        String finalVersionNumber = versionNumber;
+                        mc.execute(() -> {
+                            mc.player.sendMessage(
+                                    Text.literal(Formatting.BOLD + IdleTweaks.prefix + Formatting.DARK_RED +
+                                            "Idle Tweaks " + IdleTweaks.VERSION + " is outdated. Please update to " + finalVersionNumber + ".\n"),
+                                    false
+                            );
+                        });
                     }
                 } else {
-                    System.out.println("[IdleTweaks] No releases found.");
+                    System.out.println("[IdleTweaks] You are on the latest version.");
                 }
-            }).start();
+            } else {
+                System.out.println("[IdleTweaks] No releases found.");
+            }
         }
     }
 
