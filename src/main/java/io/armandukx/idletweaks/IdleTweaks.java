@@ -7,6 +7,7 @@ import io.armandukx.idletweaks.utils.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
@@ -14,11 +15,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Formatting;
 
 public class IdleTweaks implements ClientModInitializer {
-    public static final String VERSION = "1.1.1";
+    public static final String VERSION = "1.2.1";
     public static final String prefix =
             Formatting.YELLOW + "[I" + Formatting.GREEN + "D" + Formatting.RED + "T] " + Formatting.RESET;
-    public static int renderDistance = 0;
-    private static boolean retrieved = false;
+    public static int RenderDistance = 0;
     public static boolean closing = false;
     private static Config config;
     public static boolean _STOPCHECKING = false;
@@ -33,25 +33,22 @@ public class IdleTweaks implements ClientModInitializer {
             config.setBackgroundRenderDist(2);
         }
 
-        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
-            if (!retrieved) {
-                renderDistance = client.options.getViewDistance().getValue();
-                retrieved = true; // Just being careful
-
-                System.out.println(prefix + " Current Render Distance: " + renderDistance);
-            }
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            RenderDistance = client.options.getViewDistance().getValue();
+            GameSettingsModifier.IdleActive = false;
+            GameSettingsModifier.LastFocusLoss = 0;
         });
 
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
             System.out.println("Minecraft is closing");
 
             GameOptions GameSettings = client.options;
-            if (getConfig().bDistToggle) {
-                GameSettings.getViewDistance().setValue(IdleTweaks.renderDistance);
+            if (GetConfig().bDistToggle) {
+                GameSettings.getViewDistance().setValue(IdleTweaks.RenderDistance);
                 GameSettings.write();
                 System.out.println(GameSettings.getViewDistance().getValue());
             }
-            if (getConfig().bVolumeToggle) {
+            if (GetConfig().bVolumeToggle) {
                 if (GameSettings.getSoundVolume(SoundCategory.MASTER) <= 0) {
                     MinecraftClient.getInstance().getSoundManager().resumeAll();
                 }
@@ -66,7 +63,7 @@ public class IdleTweaks implements ClientModInitializer {
             }
         });
     }
-    public static Config getConfig() {
+    public static Config GetConfig() {
         return config;
     }
 }

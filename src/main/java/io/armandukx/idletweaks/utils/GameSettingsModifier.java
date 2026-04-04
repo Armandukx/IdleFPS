@@ -2,41 +2,40 @@ package io.armandukx.idletweaks.utils;
 
 import io.armandukx.idletweaks.IdleTweaks;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.option.GameOptions;
 
 public class GameSettingsModifier {
-    public static boolean idleActive = false;
-    private static long lastFocusLoss = 0;
+    public static boolean IdleActive = false;
+    public static long LastFocusLoss = 0;
 
     public static void init() {
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
             if (IdleTweaks.closing || client.world == null) return;
 
-            GameOptions gameSettings = client.options;
+            GameOptions GameSettings = client.options;
             Screen current = client.currentScreen;
 
             boolean focused = client.isWindowFocused();
             long now = System.currentTimeMillis();
 
             if (!focused) {
-                if (lastFocusLoss == 0) {
-                    lastFocusLoss = now;
+                if (LastFocusLoss == 0) {
+                    LastFocusLoss = now;
                 }
 
-                long elapsed = now - lastFocusLoss;
-                if (!idleActive && elapsed >= IdleTweaks.getConfig().Cooldown * 1000L) {
-                    enableIdleMode(client, gameSettings);
+                long elapsed = now - LastFocusLoss;
+                if (!IdleActive && elapsed >= IdleTweaks.GetConfig().Cooldown * 1000L) {
+                    EnableIdleMode(client, GameSettings);
                 }
             } else {
-                // Only reset lastFocusLoss if it was set before
-                if (lastFocusLoss != 0) lastFocusLoss = 0;
+                if (LastFocusLoss != 0) LastFocusLoss = 0;
 
-                // Deactivate idle mode if currently active and not in any "protected" screen
-                if (idleActive && (!(current instanceof OptionsScreen))) {
-                    disableIdleMode(client, gameSettings);
+                if (IdleActive && (!(current instanceof OptionsScreen))) {
+                    DisableIdleMode(client, GameSettings);
                 }
             }
         });
@@ -48,29 +47,36 @@ public class GameSettingsModifier {
 
             int currentDist = options.getViewDistance().getValue();
 
-            if (!idleActive && currentDist != IdleTweaks.renderDistance) {
-                IdleTweaks.renderDistance = currentDist;
+            if (!IdleActive && currentDist != IdleTweaks.RenderDistance) {
+                IdleTweaks.RenderDistance = currentDist;
             }
+        });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            if (IdleActive) {
+                DisableIdleMode(client, client.options);
+            }
+            LastFocusLoss = 0;
         });
     }
 
-    private static void enableIdleMode(MinecraftClient client, GameOptions gameSettings) {
-        if (IdleTweaks.getConfig().bDistToggle) {
-            gameSettings.getViewDistance().setValue(IdleTweaks.getConfig().backgroundRenderDist);
+    private static void EnableIdleMode(MinecraftClient client, GameOptions GameSettings) {
+        if (IdleTweaks.GetConfig().bDistToggle) {
+            GameSettings.getViewDistance().setValue(IdleTweaks.GetConfig().backgroundRenderDist);
         }
-        if (IdleTweaks.getConfig().bVolumeToggle) {
+        if (IdleTweaks.GetConfig().bVolumeToggle) {
             client.getSoundManager().stopAll();
         }
-        idleActive = true;
+        IdleActive = true;
     }
 
-    private static void disableIdleMode(MinecraftClient client, GameOptions gameSettings) {
-        if (IdleTweaks.getConfig().bDistToggle) {
-            gameSettings.getViewDistance().setValue(IdleTweaks.renderDistance);
+    public static void DisableIdleMode(MinecraftClient client, GameOptions GameSettings) {
+        if (IdleTweaks.GetConfig().bDistToggle) {
+            GameSettings.getViewDistance().setValue(IdleTweaks.RenderDistance);
         }
-        if (IdleTweaks.getConfig().bVolumeToggle) {
+        if (IdleTweaks.GetConfig().bVolumeToggle) {
             client.getSoundManager().resumeAll();
         }
-        idleActive = false;
+        IdleActive = false;
     }
 }

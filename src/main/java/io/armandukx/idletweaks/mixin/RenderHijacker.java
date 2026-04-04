@@ -13,19 +13,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MinecraftClient.class)
 public class RenderHijacker {
     @Unique
-    private long lastFrame = System.nanoTime();
+    private long LastFrame = System.nanoTime();
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void lockFps(CallbackInfo ci) {
-        if (!GameSettingsModifier.idleActive) {
-            lastFrame = System.nanoTime();
+    private void LockFps(CallbackInfo ci) {
+        if (!GameSettingsModifier.IdleActive) {
+            LastFrame = System.nanoTime();
             return;
         }
 
-        if (IdleTweaks.getConfig().bFpsToggle) {
-            long targetFrameNs = (long) (1_000_000_000.0 / IdleTweaks.getConfig().backgroundFps);
+        if (IdleTweaks.GetConfig().bFpsToggle) {
+            long targetFrameNs = (long) (1_000_000_000.0 / IdleTweaks.GetConfig().backgroundFps);
             long now = System.nanoTime();
-            long waitTime = targetFrameNs - (now - lastFrame);
+            long waitTime = targetFrameNs - (now - LastFrame);
 
             if (waitTime > 0) {
                 try {
@@ -34,7 +34,7 @@ public class RenderHijacker {
                 }
             }
 
-            lastFrame = System.nanoTime();
+            LastFrame = System.nanoTime();
         }
     }
 }

@@ -25,8 +25,8 @@ public class UpdateChecker {
                 int[] IDTParts = convertVersionStringToIntArray(IdleTweaks.VERSION);
                 int[] versionNumberParts = convertVersionStringToIntArray(versionNumber);
 
-                int IDTVersionInt = convertVersionPartsToInt(IDTParts);
-                int versionNumberInt = convertVersionPartsToInt(versionNumberParts);
+                int IDTVersionInt = ConvertVersionPartsToInt(IDTParts);
+                int versionNumberInt = ConvertVersionPartsToInt(versionNumberParts);
 
                 System.out.println("[IdleTweaks] Installed version as int: " + IDTVersionInt);
                 System.out.println("[IdleTweaks] Latest version as int: " + versionNumberInt);
@@ -78,10 +78,12 @@ public class UpdateChecker {
         return intArray;
     }
 
-    public static int convertVersionPartsToInt(int[] parts) {
+    public static int ConvertVersionPartsToInt(int[] parts) {
+        int MaxLength = 3;
         int result = 0;
-        for (int i = 0; i < parts.length; i++) {
-            result += parts[i] * Math.pow(10, (parts.length - i - 1) * 2);
+        for (int i = 0; i < MaxLength; i++) {
+            int part = i < parts.length ? parts[i] : 0;
+            result += part * (int) Math.pow(100, MaxLength - i - 1);
         }
         return result;
     }

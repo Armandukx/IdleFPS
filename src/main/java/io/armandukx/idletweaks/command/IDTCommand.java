@@ -39,7 +39,7 @@ public class IDTCommand {
                                 .executes(ctx -> {
                                     int val = IntegerArgumentType.getInteger(ctx, "number");
                                     if (val >= 1 && val <= 999) {
-                                        IdleTweaks.getConfig().setBackgroundFps(val);
+                                        IdleTweaks.GetConfig().setBackgroundFps(val);
                                     } else {
                                         sendPlayerMessage(ctx.getSource(),"Must be between 1 and 999");
                                     }
@@ -54,7 +54,7 @@ public class IDTCommand {
                                 .executes(ctx -> {
                                     int val = IntegerArgumentType.getInteger(ctx, "number");
                                     if (val >= 2 && val <= 32) {
-                                        IdleTweaks.getConfig().setBackgroundRenderDist(val);
+                                        IdleTweaks.GetConfig().setBackgroundRenderDist(val);
                                     } else {
                                         sendPlayerMessage(ctx.getSource(),"Must be between 2 and 32");
                                     }
@@ -69,7 +69,7 @@ public class IDTCommand {
                                 .executes(ctx -> {
                                     int val = IntegerArgumentType.getInteger(ctx, "number");
                                     if (val >= 0) {
-                                        IdleTweaks.getConfig().setCooldown(val);
+                                        IdleTweaks.GetConfig().setCooldown(val);
                                     } else {
                                         sendPlayerMessage(ctx.getSource(), "Minimum must be 0");
                                     }
@@ -83,19 +83,19 @@ public class IDTCommand {
 
     // --- Helpers ---
     private static int setFpsToggle(ServerCommandSource source, boolean toggle) {
-        IdleTweaks.getConfig().setbFpsToggle(toggle);
+        IdleTweaks.GetConfig().setbFpsToggle(toggle);
         sendPlayerMessage(source, "Background FPS Has Been Set to " + toggle);
         return 1;
     }
 
     private static int setRenderDistanceToggle(ServerCommandSource source, boolean toggle) {
-        IdleTweaks.getConfig().setbDistToggle(toggle);
+        IdleTweaks.GetConfig().setbDistToggle(toggle);
         sendPlayerMessage(source, "Background Render Distance Has Been Set to " + toggle);
         return 1;
     }
 
     private static int setSoundsToggle(ServerCommandSource source, boolean toggle) {
-        IdleTweaks.getConfig().setbVolumeToggle(toggle);
+        IdleTweaks.GetConfig().setbVolumeToggle(toggle);
         sendPlayerMessage(source, "Mute Background Sounds Has Been Set to " + toggle);
         return 1;
     }
